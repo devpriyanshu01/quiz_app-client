@@ -1,0 +1,6 @@
+background(primary) - #c04a66
+secondary color - #ded49f
+accent color - #b6cc6c
+background - #fbf3f5
+text - #0f0507
+https://www.realtimecolors.com/?colors=0f0507-fbf3f5-c04a66-ded49f-b6cc6c&fonts=Inter-Inter
