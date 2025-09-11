@@ -8,6 +8,8 @@ import Signup from './components/auth/Signup'
 import Login from './components/auth/Login'
 import HomePage from './components/core/HomePage'
 import CreateQuiz from './components/core/CreateQuiz'
+import CreateNewQuiz from './components/core/CreateNewQuiz'
+import AddQuestion from './components/core/AddQuestion'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -21,7 +23,10 @@ function App() {
         <Route path="/login" element={<Login />}/>
         <Route path="/signup" element={<Signup />}/>
         <Route path="/home" element={<HomePage />} />
-        <Route path="/createquiz" element={<CreateQuiz />} />
+        <Route path="/test-add-questions" element={<CreateQuiz />} />
+        <Route path="/add-questions" element={<AddQuestion/>} />
+
+        <Route path="/create-quiz" element={<CreateNewQuiz />} />
       </Routes>
     </div>
   )

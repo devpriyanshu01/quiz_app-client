@@ -7,7 +7,7 @@ import {useNavigate} from 'react-router-dom'
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: 'random01@gmail.com',
+    email: 'random02@gmail.com',
     password: 'haribol'
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -34,6 +34,7 @@ const Login = () => {
       setLoginSuccess(true)
       setFormData({email : 'random01@gmail.com', password : 'haribol'})
       setLoginSuccess(false)
+      
       navigate('/home')
     }
   }

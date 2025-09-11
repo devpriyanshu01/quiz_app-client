@@ -1,17 +1,53 @@
-import React, { useState } from 'react';
-import { Menu, X, Play, Trophy, User, LogIn } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Menu, X, Play, Trophy, User, LogIn, Axis3DIcon, LogOut, LogOutIcon, LogInIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'
 
 const Navbar = () => {
   const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  //is user logged in?
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    setIsMenuOpen(!isMenuOpen)
   }
 
   const handleSignup = () => {
     navigate("/signup")
+  }
+
+  async function checkLoginStatus(){
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/validatecookie`, {withCredentials : true})
+    
+    if (res.data.Valid){
+      console.log("user is logged in")
+      setIsLoggedIn(true)
+    }else {
+      console.log("user not logged in")
+      setIsLoggedIn(false)
+      navigate('/login')
+    }
+    console.log(res.data)
+  }
+  //check if user is logged in
+  useEffect(() => {
+    checkLoginStatus()
+  }, [isLoggedIn])
+
+  async function handleLoginLogout() {
+    if (isLoggedIn) {
+      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/logout`)
+      if (res.data.Success) {
+        console.log('logout successful')
+        console.log(res.data)
+        navigate('/login')
+      }else {
+        console.log('failed to logout')
+      }
+    }else {
+      navigate('/login')
+    }
   }
 
   return (
@@ -48,10 +84,14 @@ const Navbar = () => {
             {/* Desktop Auth Buttons */}
             <div className="hidden md:flex items-center space-x-4">
               <button 
-                onClick={() => navigate("/login")}
+                onClick={handleLoginLogout}
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center space-x-1">
-                <LogIn className="h-4 w-4" />
-                <span>Sign In</span>
+                {/* <LogIn className="h-4 w-4" />
+                <span>{isLoggedIn ? "Logout" : "Login"}</span> */}
+                <>
+                  {isLoggedIn ? <LogOutIcon /> : <LogInIcon />}
+                  {isLoggedIn ? <span>Logout</span> : <span>Login</span>}
+                </>
               </button>
               <button 
                 onClick={handleSignup}
@@ -98,7 +138,7 @@ const Navbar = () => {
               <div className="pt-2 pb-2 border-t border-gray-100 space-y-1">
                 <button className="w-full text-left text-gray-700 hover:text-blue-600 hover:bg-gray-50 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 flex items-center space-x-2">
                   <LogIn className="h-4 w-4" />
-                  <span>Sign In</span>
+                  <span>{isLoggedIn ? "Logout" : "Login"}</span>
                 </button>
                 <button 
                   onClick={handleSignup}

@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Plus, Eye, Save, Check } from 'lucide-react';
+import { currQuizId } from '../../Store/Store';
 
 const CreateQuiz = () => {
+  //from store
+  const quizId = currQuizId((state) => state.quizId)
   const [currentQuestion, setCurrentQuestion] = useState({
     question: '',
     options: ['', '', '', ''],
@@ -34,14 +37,7 @@ const CreateQuiz = () => {
   };
 
   const handleSaveQuestion = () => {
-    if (currentQuestion.question && currentQuestion.options.every(opt => opt) && currentQuestion.correctAnswer !== null) {
-      setSavedQuestions(prev => [...prev, { ...currentQuestion, id: Date.now() }]);
-      setCurrentQuestion({
-        question: '',
-        options: ['', '', '', ''],
-        correctAnswer: null
-      });
-    }
+    
   };
 
   return (
