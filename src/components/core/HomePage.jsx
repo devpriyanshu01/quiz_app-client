@@ -2,6 +2,9 @@ import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { currQuizId } from "../../Store/Store"
+import { Trash } from 'lucide-react';
+import { Activity } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 
 export default function HomePage(){
@@ -29,36 +32,81 @@ export default function HomePage(){
       setStore(quizId)
       navigate("/add-questions")
     }
+
+    //handle quiz delete
+    function handleQuizDelete(quizId) {
+      axios.post(`${import.meta.env.VITE_BASE_URL}/quiz/delete`, {quiz_id : quizId}, {withCredentials : true})
+    }
+    
+    //start quiz
+    function startQuiz(quiz){
+      navigate(`/join-quiz/${quiz.ID}`)
+      console.log(quiz.ID)
+    }
     
     return (
-      <div>
-        <div className="flex flex-col gap-1">
-            <button
-              onClick={handleCreateQuiz}
-              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg text-sm font-medium hover:to-orange-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg"
-            >
-              Create New Quiz 
-            </button>
+      <div className="min-h-screen bg-gray-100 p-6">
+        <div className="flex gap-6 justify-center mt-5">
+          {/* Main Content */}
+          <div className="flex-1 max-w-2xl space-y-6">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <button
+                onClick={handleCreateQuiz}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700"
+              >
+                Create New Quiz
+              </button>
+            </div>
 
-            <button
-              onClick={getCreatedQuizzes}
-              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-700 py-3 px-4 rounded-lg text-sm font-medium hover:from-emerald-200 hover:to-teal-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg"
-            >
-              Show My Quizzes 
-            </button>
+            <div className="bg-white rounded-lg shadow-md p-6">
+            </div>
+
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <button
+                onClick={getCreatedQuizzes}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700"
+              >
+                Show All Saved Quizzes
+              </button>
+            </div>
 
             {myQuizzes.length > 0 && (
-              <div className="mt-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">Your Created Quizzes</h2>
-                <div className="space-y-3 flex flex-col items-center">
-                  {myQuizzes.map((quiz, index) => (
-                    <div key={index} onClick={() => (addQuestions(quiz.ID))} className="w-96 flex items-center justify-center gap-2 bg-gradient-to-r from-orange-400 to-pink-500 text-white py-3 px-4 rounded-lg text-sm font-medium hover:from-orange-500 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg">
-                      {quiz.Title}
-                    </div>
-                  ))}
-                </div>
+              <div className="space-y-3">
+                {myQuizzes.map((quiz, index) => (
+                  <div key={index} className="flex  items-center space-x-2 bg-white rounded-lg shadow-md p-6">
+                    <button 
+                      onClick={() => addQuestions(quiz.ID)}
+                      className="flex items-center justify-center gap-5 bg-gradient-to-tr from-slate-500 to-stone-500 hover:from-gray-400 hover:to-stone-400 text-white px-6 py-3 rounded-lg font-medium"
+                    >
+                      {quiz.Title} 
+                    </button>
+                    <Trash className="w-11 h-11 bg-slate-300 p-2 rounded-4xl hover:bg-red-400" onClick={() => handleQuizDelete(quiz.ID)}/>
+                    <ShieldCheck className="w-11 h-11 bg-slate-300 p-2 rounded-4xl hover:bg-green-400"/>
+                    <button onClick={() => startQuiz(quiz)} 
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700"
+                    >
+                      Start Quiz
+                    </button>
+                  </div>
+                ))}
               </div>
             )}
+          </div>
+
+          {/* Sidebar */}
+          <div className="w-80">
+            <div className="bg-white rounded-lg shadow-md p-6 h-[55vh] space-y-12">
+              <div className="flex items-center gap-3 text-gray-700">
+                <span className="text-blue-600">👤</span>
+                <span className="font-medium">User Management</span>
+              </div>
+              
+              <div className="flex items-center gap-3 text-gray-700">
+                <span className="text-blue-600">⚙️</span>
+                <span className="font-medium">Settings</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )
