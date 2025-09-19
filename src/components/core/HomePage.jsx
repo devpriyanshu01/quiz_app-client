@@ -40,8 +40,22 @@ export default function HomePage(){
     
     //start quiz
     function startQuiz(quiz){
-      navigate(`/join-quiz/${quiz.ID}`)
-      console.log(quiz.ID)
+      console.log('quiz data')
+      console.log(quiz)
+      if (quiz.active) {
+        navigate(`/join-quiz/${quiz.id}`)
+      }
+      console.log(quiz.id)
+    }
+
+    //activate quiz
+    async function ActivateQuiz(quizId) {
+      console.log("activate quiz")
+      console.log(quizId)
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/quiz/activate`, {id : quizId}, {withCredentials : true})
+      if (res.data) {
+        console.log(res.data)
+      }
     }
     
     return (
@@ -78,10 +92,10 @@ export default function HomePage(){
                       onClick={() => addQuestions(quiz.ID)}
                       className="flex items-center justify-center gap-5 bg-gradient-to-tr from-slate-500 to-stone-500 hover:from-gray-400 hover:to-stone-400 text-white px-6 py-3 rounded-lg font-medium"
                     >
-                      {quiz.Title} 
+                      {quiz.title} 
                     </button>
-                    <Trash className="w-11 h-11 bg-slate-300 p-2 rounded-4xl hover:bg-red-400" onClick={() => handleQuizDelete(quiz.ID)}/>
-                    <ShieldCheck className="w-11 h-11 bg-slate-300 p-2 rounded-4xl hover:bg-green-400"/>
+                    <Trash className="w-11 h-11 bg-slate-300 p-2 rounded-4xl hover:bg-red-400" onClick={() => handleQuizDelete(quiz.id)}/>
+                    <ShieldCheck className="w-11 h-11 bg-slate-300 p-2 rounded-4xl hover:bg-green-400" onClick={() => ActivateQuiz(quiz.id)}/>
                     <button onClick={() => startQuiz(quiz)} 
                       className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700"
                     >
