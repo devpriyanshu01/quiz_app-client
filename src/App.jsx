@@ -12,6 +12,7 @@ import CreateNewQuiz from './components/core/CreateNewQuiz'
 import AddQuestion from './components/core/AddQuestion'
 import EnterQuizId from './components/core/EnterQuizId'
 import JoinQuiz from './components/core/JoinQuiz'
+import RenderQuestions from './components/core/RenderQuestions'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -31,6 +32,10 @@ function App() {
         <Route path="/create-quiz" element={<CreateNewQuiz />} />
         <Route path="/enter-quizid" element={<EnterQuizId />} />
         <Route path="/join-quiz/:quizId" element={<JoinQuiz />} />
+     
+
+
+        testing
         
       </Routes>
     </div>
