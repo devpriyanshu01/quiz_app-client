@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function RenderQuestions({ question }) {
+export default function RenderQuestions({ question, socket }) {
     const [selectedOption, setSelectedOption] = useState("");
+    const [timeleft, setTimeLeft] = useState(20)
 
     const options = [
         { id: "A", text: question.option_a },
@@ -21,13 +22,29 @@ export default function RenderQuestions({ question }) {
             console.log("Points:", question.points_correct);
         }
     }
+    
+    console.log(socket)
+
+   useEffect(() => {
+    setTimeLeft(20)
+     const intervalId = setInterval(() => {
+        setTimeLeft(prev => prev-1)
+     }, 1000)
+
+     return () => clearInterval(intervalId)
+   }, [question])
 
     return (
         <div className="w-screen h-screen flex justify-center mt-10">
             <div className="w-[90%] md:w-[60%] shadow-2xl p-6 rounded-lg">
-                <div className="mb-6">
-                    <h2 className="text-xl font-bold mb-4">{question.question_text}</h2>
-                    <p className="text-gray-600 text-sm">Points: {question.points_correct}</p>
+                <div className="mb-6 flex justify-between items-center pr-3">
+                    <div>
+                        <h2 className="text-xl font-bold mb-4">{question.question_text}</h2>
+                        <p className="text-gray-600 text-sm">Points: {question.points_correct}</p>
+                    </div>
+                    <div className="rounded-4xl border p-2 border-slate-200">
+                        <p className="text-green-600 font-semibold text-2xl"> {timeleft}</p>
+                    </div>
                 </div>
 
                 <div className="space-y-3 mb-6">

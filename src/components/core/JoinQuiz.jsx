@@ -45,7 +45,7 @@ export default function JoinQuiz(){
     setTimeout(() => {
       console.log("Quiz will begin now...")
       socket.current.send("start quiz")
-    }, 15000)
+    }, 4000)
 
   }
 
@@ -101,7 +101,7 @@ export default function JoinQuiz(){
           </div>}
           </div>
 
-          { Object.keys(question).length > 0 && question && <RenderQuestions question = {question}/>}
+          { Object.keys(question).length > 0 && question && <RenderQuestions question = {question} socket={socket}/>}
           
         </div>
     )
