@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -15,11 +15,12 @@ import JoinQuiz from './components/core/JoinQuiz'
 import RenderQuestions from './components/core/RenderQuestions'
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const path = useRef(window.location.pathname)
+  console.log(path.current)
   return (
     <div>
       {/* {location.pathname !== "/login" && location.pathname !== "signup" && <Navbar />} */}
+      {/* {path.current !== "/enter-quizid" && path.current !== } */}
       <Navbar />
       
       <Routes>
@@ -32,11 +33,7 @@ function App() {
         <Route path="/create-quiz" element={<CreateNewQuiz />} />
         <Route path="/enter-quizid" element={<EnterQuizId />} />
         <Route path="/join-quiz/:quizId" element={<JoinQuiz />} />
-     
 
-
-        testing
-        
       </Routes>
     </div>
   )

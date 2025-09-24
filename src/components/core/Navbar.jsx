@@ -26,13 +26,20 @@ const Navbar = () => {
     }else {
       console.log("user not logged in")
       setIsLoggedIn(false)
-      navigate('/login')
+      const path = window.location.pathname
+      console.log(path)
+      if (path == "/enter-quizid" || path.startsWith("/join-quiz/")){
+
+      }
+      else {
+        navigate('/login')
+      }
     }
     console.log(res.data)
   }
   //check if user is logged in
   useEffect(() => {
-    checkLoginStatus()
+      checkLoginStatus()
   }, [isLoggedIn])
 
   async function handleLoginLogout() {

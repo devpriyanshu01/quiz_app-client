@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { data, useParams } from "react-router-dom";
 import Spinner from "../utils/Spinner";
 import axios from "axios";
 import RenderQuestions from "./RenderQuestions";
@@ -21,6 +21,12 @@ export default function JoinQuiz(){
   console.log("logging question updated:")
   console.log(question)
 
+  //render enter name div
+  const [nameDiv, setNameDiv] = useState(true)
+
+  //render waiting for the quiz until question arrives
+  const [waiting, setWaiting] = useState(false)
+
   //handle enter name
   async function handleEnterQuiz(){
     setSpinner(true) 
@@ -28,6 +34,8 @@ export default function JoinQuiz(){
     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/players/save`, {name : name, quiz_id : parseInt(params.quizId)}, {withCredentials : true})
     if (res.data.success) {
       console.log(res.data)
+      setNameDiv(false)
+      setWaiting(true)
       initiateWebsocket()
     }else{
       console.log("no response received")
@@ -36,7 +44,7 @@ export default function JoinQuiz(){
 
     setTimeout(() => {
       console.log("Quiz will begin now...")
-      socket.current.send("begin quiz")
+      socket.current.send("start quiz")
     }, 15000)
 
   }
@@ -55,9 +63,8 @@ export default function JoinQuiz(){
       // Step 3: When a message is received
       socket.current.onmessage = (event) => {
         console.log('📨 Message from server:', event.data)
-        console.log(typeof(event.data))
         const parsedData = JSON.parse(event.data)
-        console.log(typeof(parsedData))
+        setWaiting(false)
         setQuestion(parsedData)
       };
   
@@ -70,7 +77,7 @@ export default function JoinQuiz(){
 
     return (
         <div className="w-screen h-screen flex justify-center mt-10">
-          {Object.keys(question).length == 0 && (
+          {nameDiv && (
             <div className="w-[80%] h-[60%] md:w-[40%] md:h-[30%] shadow-2xl flex flex-col justify-center">
             <input type="text" 
               className="mx-4 my-2 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent transiton-all duration-200"
@@ -87,6 +94,12 @@ export default function JoinQuiz(){
             </button>
           </div>
           )} 
+
+          <div className="flex items-center justify-center">
+          {waiting && <div 
+            className="font-bold px-2 text-md md:text-xl lg:text-3xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Get Ready, Quiz will start in less than 35 seconds....
+          </div>}
+          </div>
 
           { Object.keys(question).length > 0 && question && <RenderQuestions question = {question}/>}
           
