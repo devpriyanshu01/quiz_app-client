@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { currQuizId } from "../../Store/Store"
+import { currQuizId, startTrigger } from "../../Store/Store"
 import { Trash } from 'lucide-react';
 import { Activity } from 'lucide-react';
 import { ShieldCheck } from 'lucide-react';
@@ -13,6 +13,8 @@ export default function HomePage(){
     //from store
     const setStore = currQuizId((state) => (state.setQuizId))
     console.log(setStore)
+
+
     async function handleCreateQuiz(){
       // const res = axios.post(`${import.meta.env.VITE_BASE_URL}/create-quiz`, {withCredentials : true})
 
@@ -42,9 +44,8 @@ export default function HomePage(){
     function startQuiz(quiz){
       console.log('quiz data')
       console.log(quiz)
-      if (quiz.active) {
-        navigate(`/join-quiz/${quiz.id}`)
-      }
+      //set trigger for starting quiz
+      navigate(`/initquiz/${quiz.id}`)
       console.log(quiz.id)
     }
 

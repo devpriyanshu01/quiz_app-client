@@ -42,11 +42,6 @@ export default function JoinQuiz(){
     }
     setSpinner(false)
 
-    setTimeout(() => {
-      console.log("Quiz will begin now...")
-      socket.current.send("start quiz")
-    }, 4000)
-
   }
 
   //initate websocket connection

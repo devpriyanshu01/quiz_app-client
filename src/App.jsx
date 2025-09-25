@@ -13,6 +13,7 @@ import AddQuestion from './components/core/AddQuestion'
 import EnterQuizId from './components/core/EnterQuizId'
 import JoinQuiz from './components/core/JoinQuiz'
 import RenderQuestions from './components/core/RenderQuestions'
+import InitQuiz from './components/core/InitQuiz'
 
 function App() {
   const path = useRef(window.location.pathname)
@@ -33,6 +34,7 @@ function App() {
         <Route path="/create-quiz" element={<CreateNewQuiz />} />
         <Route path="/enter-quizid" element={<EnterQuizId />} />
         <Route path="/join-quiz/:quizId" element={<JoinQuiz />} />
+        <Route path="/initquiz/:quizId" element={<InitQuiz />} />
 
       </Routes>
     </div>

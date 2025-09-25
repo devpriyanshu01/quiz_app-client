@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 export default function RenderQuestions({ question, socket }) {
     const [selectedOption, setSelectedOption] = useState("");
-    const [timeleft, setTimeLeft] = useState(20)
+    const [timeleft, setTimeLeft] = useState(0)
 
     const options = [
         { id: "A", text: question.option_a },
@@ -22,16 +22,24 @@ export default function RenderQuestions({ question, socket }) {
             console.log("Points:", question.points_correct);
         }
     }
-    
+     
     console.log(socket)
 
    useEffect(() => {
+    
+    const timeoutId = setTimeout(() => {
+       socket.current.send("next ques") 
+    }, 22000)
+
     setTimeLeft(20)
      const intervalId = setInterval(() => {
         setTimeLeft(prev => prev-1)
      }, 1000)
 
-     return () => clearInterval(intervalId)
+     return () => {
+        clearTimeout(timeoutId)
+        clearInterval(intervalId)
+     }
    }, [question])
 
     return (
