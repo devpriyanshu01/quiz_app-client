@@ -96,7 +96,7 @@ export default function JoinQuiz(){
           </div>}
           </div>
 
-          { Object.keys(question).length > 0 && question && <RenderQuestions question = {question} socket={socket}/>}
+          { Object.keys(question).length > 0 && question && <RenderQuestions question = {question} socket={socket} quizId={params.quizId}/>}
           
         </div>
     )

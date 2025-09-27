@@ -1,14 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export default function RenderQuestions({ question, socket }) {
+export default function RenderQuestions({ question, socket, quizId}) {
     const [selectedOption, setSelectedOption] = useState("");
     const [timeleft, setTimeLeft] = useState(0)
 
+    //ref variable for storing cookie of current player
+    const pCookie = useRef("")
+
+    //save ans body
+    const saveAnsBody = {
+        token : pCookie.current,
+        question_id : question.id,
+        quiz_id : parseInt(quizId),
+        choosen_ans : selectedOption,
+        marks : 0
+    }
+
+    //variable for storing whether the question was answered or not
+    const quesAnswered = useRef(false) 
+
     const options = [
-        { id: "A", text: question.option_a },
-        { id: "B", text: question.option_b },
-        { id: "C", text: question.option_c },
-        { id: "D", text: question.option_d }
+        { id: "a", text: question.option_a },
+        { id: "b", text: question.option_b },
+        { id: "c", text: question.option_c },
+        { id: "d", text: question.option_d }
     ];
 
     function handleOptionSelect(optionId) {
@@ -20,24 +35,42 @@ export default function RenderQuestions({ question, socket }) {
             console.log("Selected answer:", selectedOption);
             console.log("Correct answer:", question.correct_answer);
             console.log("Points:", question.points_correct);
+            if (selectedOption == question.correct_answer) {
+                saveAnsBody.marks = 75 + timeleft
+            }
         }
+        quesAnswered.current = true
+        console.log(saveAnsBody)
+        socket.current.send(JSON.stringify(saveAnsBody)) 
     }
-     
-    console.log(socket)
+    //useEffect for sending a msg to server when question is not answered
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            if (!quesAnswered.current) {
+                socket.current.send(JSON.stringify(saveAnsBody))
+                console.log("sent to be for question:", question.question_text)
+            }
+        }, 25000)
+        return () => {
+            clearTimeout(timerId)
+            quesAnswered.current = false
+            console.log("exiting useEffect")
+        }
+    }, [question])
+
+    //useEffect for fetching player cookie.
+    useEffect(() => {
+        pCookie.current = GetPlayerCookie()    
+        console.log(pCookie.current)
+    }, [])
 
    useEffect(() => {
-    
-    const timeoutId = setTimeout(() => {
-       socket.current.send("next ques") 
-    }, 22000)
-
-    setTimeLeft(20)
+    setTimeLeft(25)
      const intervalId = setInterval(() => {
         setTimeLeft(prev => prev-1)
      }, 1000)
 
      return () => {
-        clearTimeout(timeoutId)
         clearInterval(intervalId)
      }
    }, [question])
@@ -95,4 +128,19 @@ export default function RenderQuestions({ question, socket }) {
             </div>
         </div>
     );
+}
+
+//function to get cookie
+function GetPlayerCookie() {
+    const cookies = document.cookie
+    const cookieArray = cookies.split("; ")
+    let playerToken = ""
+    for (let i = 0; i < cookieArray.length; i++) {
+        if(cookieArray[i].startsWith("player_token")){
+            playerToken = cookieArray[i]
+            break
+        }
+    }
+    console.log("player token printing")
+    return playerToken
 }
