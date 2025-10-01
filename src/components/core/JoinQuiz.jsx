@@ -27,6 +27,9 @@ export default function JoinQuiz(){
   //render waiting for the quiz until question arrives
   const [waiting, setWaiting] = useState(false)
 
+  //leaderboard data
+  const [leaderboardData, setLeaderBoardData] = useState({})
+
   //handle enter name
   async function handleEnterQuiz(){
     setSpinner(true) 
@@ -59,8 +62,12 @@ export default function JoinQuiz(){
       socket.current.onmessage = (event) => {
         console.log('📨 Message from server:', event.data)
         const parsedData = JSON.parse(event.data)
+        if (parsedData.type == "question"){
+          setQuestion(parsedData)
+        }else if(parsedData.type == "leaderboard"){
+          setLeaderBoardData(parsedData)
+        }
         setWaiting(false)
-        setQuestion(parsedData)
       };
   
       // Step 4: Handle errors

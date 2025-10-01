@@ -53,6 +53,7 @@ export default function RenderQuestions({ question, socket, quizId }) {
         const timerId = setTimeout(() => {
             if (!quesAnswered.current) {
                 socket.current.send(JSON.stringify(saveAnsBody))
+                socket.current.send("send leaderboard")
             }
             setShowLeaderboard(true)
         }, 25000)
