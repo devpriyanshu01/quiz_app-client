@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import Leaderboard from "../utils/Leaderboard";
 
-export default function RenderQuestions({ question, socket, quizId }) {
+export default function RenderQuestions({ question, socket, quizId, leaderboardData }) {
     const [selectedOption, setSelectedOption] = useState("");
     const [timeleft, setTimeLeft] = useState(0)
 
@@ -53,8 +54,9 @@ export default function RenderQuestions({ question, socket, quizId }) {
         const timerId = setTimeout(() => {
             if (!quesAnswered.current) {
                 socket.current.send(JSON.stringify(saveAnsBody))
-                socket.current.send("send leaderboard")
             }
+            console.log("sent trigger for sending leaderboard")
+            socket.current.send("send leaderboard")
             setShowLeaderboard(true)
         }, 25000)
         return () => {
@@ -134,7 +136,7 @@ export default function RenderQuestions({ question, socket, quizId }) {
             }
             {/* {showLeaderboard && <div className="text-3xl">Leader - Board</div>} */}
             {showLeaderboard && <div>
-              Leaderboard
+              <Leaderboard leaderData={leaderboardData.Data} />
                 </div>}
         </div>
     );
