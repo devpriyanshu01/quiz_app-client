@@ -66,6 +66,8 @@ export default function JoinQuiz(){
           setQuestion(parsedData)
         }else if(parsedData.type == "leaderboard"){
           setLeaderBoardData(parsedData)
+          console.log("printing leaderboard data")
+          console.log(leaderboardData)
         }
         setWaiting(false)
       };
@@ -103,7 +105,7 @@ export default function JoinQuiz(){
           </div>}
           </div>
 
-          { Object.keys(question).length > 0 && question && <RenderQuestions question = {question} socket={socket} quizId={params.quizId}/>}
+          { Object.keys(question).length > 0 && question && <RenderQuestions question = {question} socket={socket} quizId={params.quizId} leaderboardData={leaderboardData}/>}
           
         </div>
     )

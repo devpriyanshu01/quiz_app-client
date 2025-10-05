@@ -132,7 +132,10 @@ export default function RenderQuestions({ question, socket, quizId }) {
                     </div>
                 </div>
             }
-            {showLeaderboard && <div className="text-3xl">Leader - Board</div>}
+            {/* {showLeaderboard && <div className="text-3xl">Leader - Board</div>} */}
+            {showLeaderboard && <div>
+              Leaderboard
+                </div>}
         </div>
     );
 }
