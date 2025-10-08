@@ -15,7 +15,7 @@ export default function RenderQuestions({ question, socket, quizId, leaderboardD
     }
 
     //printing save ans body
-    console.log(saveAnsBody)
+    // console.log(saveAnsBody)
 
     //variable for storing whether the question was answered or not
     const quesAnswered = useRef(false)
