@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Leaderboard from "../utils/Leaderboard";
 
-export default function RenderQuestions({ question, socket, quizId, leaderboardData }) {
+export default function RenderQuestions({ question, socket, quizId, leaderboardData, token }) {
     const [selectedOption, setSelectedOption] = useState("");
     const [timeleft, setTimeLeft] = useState(0)
 
@@ -10,7 +10,7 @@ export default function RenderQuestions({ question, socket, quizId, leaderboardD
 
     //save ans body
     const saveAnsBody = {
-        token: pCookie.current,
+        token: token.current, 
         question_id: question.id,
         quiz_id: parseInt(quizId),
         choosen_ans: selectedOption,
@@ -65,10 +65,10 @@ export default function RenderQuestions({ question, socket, quizId, leaderboardD
     }, [question])
 
     //useEffect for fetching player cookie.
-    useEffect(() => {
-        pCookie.current = GetPlayerCookie()
-        console.log(pCookie.current)
-    }, [])
+    // useEffect(() => {
+    //     pCookie.current = GetPlayerCookie()
+    //     console.log(pCookie.current)
+    // }, [])
 
     useEffect(() => {
         setTimeLeft(25)
@@ -143,16 +143,18 @@ export default function RenderQuestions({ question, socket, quizId, leaderboardD
 }
 
 //function to get cookie
-function GetPlayerCookie() {
-    const cookies = document.cookie
-    const cookieArray = cookies.split("; ")
-    let playerToken = ""
-    for (let i = 0; i < cookieArray.length; i++) {
-        if (cookieArray[i].startsWith("player_token")) {
-            playerToken = cookieArray[i]
-            break
-        }
-    }
-    console.log("player token printing")
-    return playerToken
-}
+// function GetPlayerCookie() {
+//     const cookies = document.cookie
+//     const cookieArray = cookies.split("; ")
+
+//     let playerToken = ""
+//     for (let i = 0; i < cookieArray.length; i++) {
+//         if (cookieArray[i].startsWith("player_token")) {
+//             playerToken = cookieArray[i]
+//             break
+//         }
+//     }
+//     console.log("player_token printing below........")
+//     console.log(playerToken)
+//     return playerToken
+// }

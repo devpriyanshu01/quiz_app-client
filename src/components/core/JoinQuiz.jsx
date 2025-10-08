@@ -29,6 +29,9 @@ export default function JoinQuiz(){
 
   //leaderboard data
   const [leaderboardData, setLeaderBoardData] = useState({})
+  
+  //variable for storing the token
+  const tokenCookie = useRef("")
 
   //handle enter name
   async function handleEnterQuiz(){
@@ -37,6 +40,7 @@ export default function JoinQuiz(){
     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/players/save`, {name : name, quiz_id : parseInt(params.quizId)}, {withCredentials : true})
     if (res.data.success) {
       console.log(res.data)
+      tokenCookie.current = res.data.token
       setNameDiv(false)
       setWaiting(true)
       initiateWebsocket()
@@ -50,7 +54,8 @@ export default function JoinQuiz(){
   //initate websocket connection
   function initiateWebsocket(){
       // Step 1: Connect to WebSocket server
-      socket.current = new WebSocket(`http://localhost:3001/quiz/join/${params.quizId}`); // Replace with your Go backend URL
+      // socket.current = new WebSocket(`http://localhost:3001/quiz/join/${params.quizId}`); // Replace with your Go backend URL
+      socket.current = new WebSocket(`${import.meta.env.VITE_BASE_URL}/quiz/join/${params.quizId}`); // Replace with your Go backend URL
   
       // Step 2: When connection opens
       socket.current.onopen = () => {
@@ -105,7 +110,7 @@ export default function JoinQuiz(){
           </div>}
           </div>
 
-          { Object.keys(question).length > 0 && question && <RenderQuestions question = {question} socket={socket} quizId={params.quizId} leaderboardData={leaderboardData}/>}
+          { Object.keys(question).length > 0 && question && <RenderQuestions question = {question} socket={socket} quizId={params.quizId} leaderboardData={leaderboardData} token={tokenCookie}/>}
           
         </div>
     )

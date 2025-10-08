@@ -12,7 +12,9 @@ useEffect(() => {
 //initate websocket connection
   function initiateWebsocket(){
       // Step 1: Connect to WebSocket server
-      socket.current = new WebSocket(`http://localhost:3001/quiz/join/${params.quizId}`); // Replace with your Go backend URL
+      // socket.current = new WebSocket(`http://localhost:3001/quiz/join/${params.quizId}`); // Replace with your Go backend URL
+      socket.current = new WebSocket(`${import.meta.env.VITE_BASE_URL}/quiz/join/${params.quizId}`); // Replace with your Go backend URL
+
   
       // Step 2: When connection opens
       socket.current.onopen = () => {
