@@ -69,6 +69,7 @@ export default function JoinQuiz(){
         const parsedData = JSON.parse(event.data)
         if (parsedData.type == "question"){
           setQuestion(parsedData)
+          console.log(parsedData)
         }else if(parsedData.type == "leaderboard"){
           setLeaderBoardData(parsedData)
           console.log("printing leaderboard data")

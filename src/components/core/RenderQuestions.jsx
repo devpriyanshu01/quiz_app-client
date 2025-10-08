@@ -5,9 +5,6 @@ export default function RenderQuestions({ question, socket, quizId, leaderboardD
     const [selectedOption, setSelectedOption] = useState("");
     const [timeleft, setTimeLeft] = useState(0)
 
-    //ref variable for storing cookie of current player
-    const pCookie = useRef("")
-
     //save ans body
     const saveAnsBody = {
         token: token.current, 
@@ -16,6 +13,9 @@ export default function RenderQuestions({ question, socket, quizId, leaderboardD
         choosen_ans: selectedOption,
         marks: 0
     }
+
+    //printing save ans body
+    console.log(saveAnsBody)
 
     //variable for storing whether the question was answered or not
     const quesAnswered = useRef(false)
@@ -63,12 +63,6 @@ export default function RenderQuestions({ question, socket, quizId, leaderboardD
             clearTimeout(timerId)
         }
     }, [question])
-
-    //useEffect for fetching player cookie.
-    // useEffect(() => {
-    //     pCookie.current = GetPlayerCookie()
-    //     console.log(pCookie.current)
-    // }, [])
 
     useEffect(() => {
         setTimeLeft(25)
@@ -141,20 +135,3 @@ export default function RenderQuestions({ question, socket, quizId, leaderboardD
         </div>
     );
 }
-
-//function to get cookie
-// function GetPlayerCookie() {
-//     const cookies = document.cookie
-//     const cookieArray = cookies.split("; ")
-
-//     let playerToken = ""
-//     for (let i = 0; i < cookieArray.length; i++) {
-//         if (cookieArray[i].startsWith("player_token")) {
-//             playerToken = cookieArray[i]
-//             break
-//         }
-//     }
-//     console.log("player_token printing below........")
-//     console.log(playerToken)
-//     return playerToken
-// }
