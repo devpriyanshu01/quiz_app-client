@@ -58,6 +58,7 @@ export default function RenderQuestions({ question, socket, quizId, leaderboardD
             console.log("sent trigger for sending leaderboard")
             socket.current.send("send leaderboard")
             setShowLeaderboard(true)
+            setSelectedOption("")
         }, 25000)
         return () => {
             clearTimeout(timerId)

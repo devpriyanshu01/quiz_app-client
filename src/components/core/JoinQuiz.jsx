@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { data, useParams } from "react-router-dom";
+import { data, useNavigate, useParams } from "react-router-dom";
 import Spinner from "../utils/Spinner";
 import axios from "axios";
 import RenderQuestions from "./RenderQuestions";
@@ -32,6 +32,9 @@ export default function JoinQuiz(){
   
   //variable for storing the token
   const tokenCookie = useRef("")
+
+  //navigate variable
+  const navigate = useNavigate()
 
   //handle enter name
   async function handleEnterQuiz(){
@@ -74,6 +77,10 @@ export default function JoinQuiz(){
           setLeaderBoardData(parsedData)
           console.log("printing leaderboard data")
           console.log(leaderboardData)
+        }else if(parsedData === "no more questions"){
+          console.log("all questions ended")
+          //so navigate to enter quiz app 
+          navigate("/enter-quizid")
         }
         setWaiting(false)
       };
