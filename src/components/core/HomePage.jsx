@@ -5,6 +5,8 @@ import { currQuizId, startTrigger } from "../../Store/Store"
 import { Trash } from 'lucide-react';
 import { Activity } from 'lucide-react';
 import { ShieldCheck } from 'lucide-react';
+import Spinner from "../utils/Spinner";
+import { Info } from 'lucide-react';
 
 
 export default function HomePage(){
@@ -20,14 +22,19 @@ export default function HomePage(){
 
       navigate('/create-quiz')
     }
+
+    //variable for rendering loader
+    const [spinner, setSpinner] = useState(false)
     
     async function getCreatedQuizzes() {
+      setSpinner(true)
       const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/listmyquizzes`, {withCredentials : true})
       console.log(res.data)
       if (res.data?.length > 0){
         console.log('payload arrived')
         setMyQuizzes(res.data)
       }
+      setSpinner(false)
     }
 
     function addQuestions(quizId) {
@@ -64,25 +71,30 @@ export default function HomePage(){
         <div className="flex gap-6 justify-center mt-5">
           {/* Main Content */}
           <div className="flex-1 max-w-2xl space-y-6">
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="flex gap-4 bg-white rounded-lg shadow-md p-6">
               <button
                 onClick={handleCreateQuiz}
                 className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700"
               >
                 Create New Quiz
               </button>
+              <div className="flex items-center gap-1">
+                <Info />
+                <p className="text-xs">Clicking this button will re-direct you to New Quiz Creation Page</p>
+              </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-md p-6">
-            </div>
-
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white rounded-lg shadow-md p-6 flex gap-5">
               <button
                 onClick={getCreatedQuizzes}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700"
+                className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700"
               >
-                Show All Saved Quizzes
+                Show All Saved Quizzes {spinner && <Spinner w={5} h={5} />}
               </button>
+              <div className="flex items-center gap-1 justify-center">
+                <Info />
+                <p className="text-xs">Clicking on this button will list all the quizzes a admin has created.</p>
+              </div>
             </div>
 
             {myQuizzes.length > 0 && (

@@ -24,17 +24,18 @@ export default function JoinQuiz(){
   //render enter name div
   const [nameDiv, setNameDiv] = useState(true)
 
-  //render waiting for the quiz until question arrives
-  const [waiting, setWaiting] = useState(false)
-
   //leaderboard data
   const [leaderboardData, setLeaderBoardData] = useState({})
   
   //variable for storing the token
   const tokenCookie = useRef("")
 
-  //navigate variable
+  //navigation variable
   const navigate = useNavigate()
+
+  //variable to wait for the question to arrive
+  const [waiting, setWaiting] = useState(false)
+
 
   //handle enter name
   async function handleEnterQuiz(){
@@ -51,7 +52,6 @@ export default function JoinQuiz(){
       console.log("no response received")
     }
     setSpinner(false)
-
   }
 
   //initate websocket connection
@@ -77,8 +77,10 @@ export default function JoinQuiz(){
           setLeaderBoardData(parsedData)
           console.log("printing leaderboard data")
           console.log(leaderboardData)
-        }else if(parsedData === "no more questions"){
+        }
+        if(event.data == "EOQ"){
           console.log("all questions ended")
+          alert("End of Questions")
           //so navigate to enter quiz app 
           navigate("/enter-quizid")
         }
@@ -88,6 +90,7 @@ export default function JoinQuiz(){
       // Step 4: Handle errors
       socket.current.onerror = (error) => {
         console.error('❌ WebSocket error:', error);
+        alert("Websocket Error", error)
       };
   }
 
@@ -114,8 +117,9 @@ export default function JoinQuiz(){
 
           <div className="flex items-center justify-center">
           {waiting && <div 
-            className="font-bold px-2 text-md md:text-xl lg:text-3xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Get Ready, Quiz will start in less than 35 seconds....
+            className="font-bold px-2 text-md md:text-xl lg:text-3xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Quiz will start soon...
           </div>}
+
           </div>
 
           { Object.keys(question).length > 0 && question && <RenderQuestions question = {question} socket={socket} quizId={params.quizId} leaderboardData={leaderboardData} token={tokenCookie}/>}

@@ -3,6 +3,7 @@ import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
 import axios from 'axios';
 import { CircleCheckBig } from 'lucide-react';
 import {useNavigate} from 'react-router-dom'
+import Spinner from '../utils/Spinner';
 
 
 const Login = () => {
@@ -24,8 +25,13 @@ const Login = () => {
 
   const navigate = useNavigate()
 
+  //variable for rendering spinner
+  const [spinner, setSpinner] = useState(false)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    //start the loader/spinner
+    setSpinner(true)
     // Handle login logic here
     console.log('Login data:', formData);
     //login 
@@ -34,7 +40,7 @@ const Login = () => {
       setLoginSuccess(true)
       setFormData({email : 'random01@gmail.com', password : 'haribol'})
       setLoginSuccess(false)
-      
+      setSpinner(false) //set loader to false 
       navigate('/home')
     }
   }
@@ -136,7 +142,7 @@ const Login = () => {
               onClick={handleSubmit}
               className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg"
             >
-              Login {loginSuccess && <CircleCheckBig className="w-5 h-5"/>}
+              Login {spinner && <Spinner w={5} h={5}/>} {loginSuccess && <CircleCheckBig className="w-5 h-5"/>}
             </button>
           </div>
 

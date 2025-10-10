@@ -10,3 +10,9 @@ export const startTrigger = create((set) => ({
     start : false,
     setStart : ((trg) => set({start : trg}))
 }))
+
+//when quiz-owner has clicked on begin quiz
+export const quizStart = create((set) => ({
+    quizBegan : false,
+    setQuizBegan : () => set({quizBegan : true})
+}))

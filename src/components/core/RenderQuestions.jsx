@@ -32,6 +32,9 @@ export default function RenderQuestions({ question, socket, quizId, leaderboardD
     //variable for showing leaderboard
     const [showLeaderboard, setShowLeaderboard] = useState(false)
 
+    //variable to disable the submit answer button
+    const [disabled, setDisabled] = useState(false)
+
     function handleOptionSelect(optionId) {
         setSelectedOption(optionId);
     }
@@ -46,11 +49,13 @@ export default function RenderQuestions({ question, socket, quizId, leaderboardD
             }
         }
         quesAnswered.current = true
+        setDisabled(true)
         console.log(saveAnsBody)
         socket.current.send(JSON.stringify(saveAnsBody))
     }
     //useEffect for sending a msg to server when question is not answered
     useEffect(() => {
+        setDisabled(false)
         quesAnswered.current = false
         setShowLeaderboard(false)
         const timerId = setTimeout(() => {
@@ -124,7 +129,7 @@ export default function RenderQuestions({ question, socket, quizId, leaderboardD
                         <button
                             className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3 rounded-lg text-white hover:from-blue-700 hover:to-purple-700 font-bold w-full disabled:opacity-50 disabled:cursor-not-allowed"
                             onClick={handleSubmit}
-                            disabled={!selectedOption}
+                            disabled={disabled}
                         >
                             Submit Answer
                         </button>

@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useRef } from "react";
+import { quizStart } from "../../Store/Store";
 
 export default function InitQuiz(){
 const params = useParams()
@@ -9,6 +10,7 @@ const socket = useRef()
 useEffect(() => {
    initiateWebsocket() 
 }, [])
+
 //initate websocket connection
   function initiateWebsocket(){
       // Step 1: Connect to WebSocket server
