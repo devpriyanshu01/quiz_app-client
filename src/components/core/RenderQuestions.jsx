@@ -14,6 +14,8 @@ export default function RenderQuestions({ question, socket, quizId, leaderboardD
         marks: 0
     }
 
+    //log question received
+    console.log(question)
     //printing save ans body
     // console.log(saveAnsBody)
 
