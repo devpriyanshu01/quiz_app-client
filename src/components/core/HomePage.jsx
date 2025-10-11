@@ -13,8 +13,7 @@ export default function HomePage(){
     const navigate = useNavigate()
     const [myQuizzes, setMyQuizzes] = useState([])
     //from store
-    const setStore = currQuizId((state) => (state.setQuizId))
-    console.log(setStore)
+    const setQuizId = currQuizId((state) => (state.setQuizId))
 
 
     async function handleCreateQuiz(){
@@ -38,7 +37,8 @@ export default function HomePage(){
     }
 
     function addQuestions(quizId) {
-      setStore(quizId)
+      console.log("Quiz Id: ", quizId)
+      setQuizId(quizId)
       navigate("/add-questions")
     }
 
@@ -99,11 +99,12 @@ export default function HomePage(){
 
             {myQuizzes.length > 0 && (
               <div className="space-y-3">
+                <div className="font-extrabold text-2xl text-slate-600 ml-1">My Saved Quizzes</div>
                 {myQuizzes.map((quiz, index) => (
-                  <div key={index} className="flex  items-center space-x-2 bg-white rounded-lg shadow-md p-6">
+                  <div key={quiz.id} className="flex  items-center space-x-2 bg-white rounded-lg shadow-md p-6">
                     <button 
-                      onClick={() => addQuestions(quiz.ID)}
-                      className="flex items-center justify-center gap-5 bg-gradient-to-tr from-slate-500 to-stone-500 hover:from-gray-400 hover:to-stone-400 text-white px-6 py-3 rounded-lg font-medium"
+                      onClick={() => addQuestions(quiz.id)}
+                      className="flex items-center justify-center gap-5 bg-emerald-400 hover:bg-emerald-500 text-slate-500 hover:text-slate-500 font-bold px-6 py-3 rounded-lg "
                     >
                       {quiz.title} 
                     </button>

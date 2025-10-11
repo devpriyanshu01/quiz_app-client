@@ -1,8 +1,10 @@
-import { useRef, useState } from "react"
+import { use, useRef, useState } from "react"
 import { Eye, Save, CheckLine, OptionIcon } from 'lucide-react';
 import { currQuizId } from "../../Store/Store";
 import axios from "axios";
 import PreviewPage from "./PreviewPage";
+import Spinner from "../utils/Spinner";
+import { CloudCheck } from 'lucide-react';
 
 export default function AddQuestion() {
     const [options, setOptions] = useState([
@@ -24,9 +26,10 @@ export default function AddQuestion() {
     }
     
     //get curr quiz_id
-    const quiz_id = currQuizId(state => state.quizId)
+    const quiz_Id = currQuizId(state => state.quizId)
+
     const [saveQuestions, setSaveQuestions] = useState({
-        quiz_id : quiz_id,
+        quiz_id : quiz_Id,
         question_text : "",
         option_a : "",
         option_b : "",
@@ -36,6 +39,12 @@ export default function AddQuestion() {
     })
 
     const [preview, setPreview] = useState(false)
+
+    //variable for rendering spinner
+    const [spinner, setSpinner] = useState(false)
+
+    //variable to show that question was saved or not
+    const [saved, setSaved] = useState(false)
 
     //handle preview
     function handlePreview(){
@@ -47,12 +56,16 @@ export default function AddQuestion() {
 
     //handle save question button click
     async function handleSaveQuestion() {
+        setSpinner(true)
         console.log(saveQuestions)
         const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/savequestion`, saveQuestions, {withCredentials : true})
         if (res.data){
             console.log(res.data)
-            //clear input fields
-            setSaveQuestions({...saveQuestions, question_text : "", option_a : "", option_b : "", option_c : "", option_d : "", correct_answer : ""})
+            if(res.data.IsSaved){
+                setSaved(true)
+                //clear input fields
+                setSaveQuestions({...saveQuestions, question_text : "", option_a : "", option_b : "", option_c : "", option_d : "", correct_answer : ""})
+            }
         }
         //remove tick mark from prev correct answer button
         setOptions((prev) => (
@@ -60,6 +73,8 @@ export default function AddQuestion() {
                option.correct ? ({...option, correct : false}) : option 
             ))
         ))
+        setSpinner(false)
+        setSaved(false)
     }
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center">
@@ -83,7 +98,7 @@ export default function AddQuestion() {
                     <div className="w-full px-6">
                         <p className="font-semibold">Options</p>
                         {options.map((option) => (
-                            <div className="w-full flex justify-center items-center flex-cols gap-2 mb-3">
+                            <div key={option.id} className="w-full flex justify-center items-center flex-cols gap-2 mb-3">
                                 <input type="text"
                                     className={option.correct ? "w-[85%] px-6 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transiton-all duration-200" : "w-[75%] px-6 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transiton-all duration-200"}
                                     placeholder={`Option ${option.id}`}
@@ -103,7 +118,7 @@ export default function AddQuestion() {
                             <button className="flex items-center justify-center gap-2 w-[70%] px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-md"
                                 onClick={handleSaveQuestion} 
                             >
-                                {<Save className="w-6 h-6"/>}Save Question
+                                {<Save className="w-6 h-6"/>}Save Question {spinner && <Spinner w={5} h={5}/>} {saved && <CloudCheck />}
                             </button>
                             <button className="flex items-center justify-center gap-2  w-[30%] bg-gray-300 hover:bg-gray-400 px-6 py-3 rounded-md"
                                 onClick={handlePreview}
